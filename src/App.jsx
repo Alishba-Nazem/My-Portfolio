@@ -377,15 +377,19 @@ export default function AlishbaPortfolio() {
     setInput("");
     setLoading(true);
     try {
+      const formattedHistory = history.map((msg) => ({
+        role: msg.role === "bot" ? "assistant" : "user",
+        text: msg.text,
+      }));
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: formattedHistory }), 
       });
       
       const data = await response.json();
       
-      // Agar backend se direct reply aa raha hai toh usko set karein
       setMessages((prev) => [
         ...prev, 
         { role: "bot", text: data.reply || "Sorry, I couldn't quite get that — try asking again?" }

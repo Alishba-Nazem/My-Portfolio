@@ -18,7 +18,6 @@ RULES:
 3. Never invent facts. If unsure, say she hasn't added that yet and suggest emailing her.
 4. Keep it tight, no filler.`;
 
-// Official Anthropic client initialize karein
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -35,13 +34,17 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    // Format messages for Anthropic SDK
+    // Check karein agar messages array nahi hai toh error na aaye
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ reply: "Error: Messages must be sent as an array." });
+    }
+
+    // Messages format ko secure karein aur structure theek karein
     const formattedMessages = messages.map(msg => ({
-      role: msg.role === "bot" ? "assistant" : "user",
-      content: msg.text
+      role: msg.role === "assistant" ? "assistant" : "user",
+      content: msg.text || ""
     }));
 
-    // Official SDK API call (Yeh header failure nahi hone deta)
     const msg = await anthropic.messages.create({
       model: "claude-3-5-sonnet-20241022",
       max_tokens: 500,
