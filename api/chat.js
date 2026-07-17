@@ -34,15 +34,14 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    // Check karein agar messages array nahi hai toh error na aaye
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ reply: "Error: Messages must be sent as an array." });
     }
 
-    // Messages format ko secure karein aur structure theek karein
+    // Anthropic SDK ko content hamesha plain string format mein chahiye hota hai
     const formattedMessages = messages.map(msg => ({
       role: msg.role === "assistant" ? "assistant" : "user",
-      content: msg.text || ""
+      content: String(msg.text || "") // Ensure it's a pure string
     }));
 
     const msg = await anthropic.messages.create({
@@ -55,6 +54,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply: msg.content[0].text });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ reply: "Anthropic connection failed: " + err.message });
+    return res.status(500).json({ reply: "Anthropic failed: " + err.message });
   }
 }
