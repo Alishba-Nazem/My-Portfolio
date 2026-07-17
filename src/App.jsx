@@ -377,17 +377,15 @@ export default function AlishbaPortfolio() {
     setInput("");
     setLoading(true);
     try {
-    try {
-  // 1. URL ke shuru mein / lagayein aur body mein sirf messages bhejen
   const response = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages: history }), 
+    body: JSON.stringify({ messages: history }), // Sirf messages bhejhein
   });
   
   const data = await response.json();
   
-  // 2. data.reply ko use karein kyunki backend se 'reply' aa raha hai
+  // data.content ki jagah data.reply use karein
   setMessages((prev) => [...prev, { role: "bot", text: data.reply || "Sorry, I couldn't quite get that — try asking again?" }]);
 } catch (e) {
   setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting right now — email Alishba directly at " + CONTACT.email }]);

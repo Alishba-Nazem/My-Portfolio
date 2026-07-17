@@ -53,11 +53,11 @@ export default async function handler(req, res) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 500,
-        system: SYSTEM_PROMPT,
-        messages,
-      }),
+  model: "claude-3-5-sonnet-20241022", // <-- Bilkul yeh naam copy-paste kar dein
+  max_tokens: 500,
+  system: SYSTEM_PROMPT,
+  messages,
+}),
     });
 
     const data = await response.json();
