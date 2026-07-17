@@ -1,8 +1,10 @@
+import Anthropic from '@anthropic-ai/sdk';
+
 const SYSTEM_PROMPT = `You are the portfolio assistant on Alishba Nazem's personal website. Answer visitor questions ABOUT Alishba, warm and concise, human tone, 2-5 sentences unless asked for detail.
 
 FACTS ABOUT HER:
 Role: Software Engineering student, Frontend/Full-Stack/AI-integration experience.
-Education: BS Software Engineering, University of Gujrat (2023-2027), CGPA 3.76/4.0, 6th semester ongoing. FSc Pre-Engineering, Superior Group of Colleges (2021-2023), 960/1100. Matriculation, Govt. Girls High School Sidh (2019-2021), 1100/1100 (topper).
+Education: BS Software Engineering, University of Gujrat (2023-2027), CGPA 3.78/4.0, 6th semester done. FSc Pre-Engineering, Superior Group of Colleges (2021-2023), 960/1100. Matriculation, Govt. Girls High School Sidh (2019-2021), 1100/1100 (topper).
 Internships: DecodeLabs - Frontend Developer (May 2026, 1 month). ScaleUp Brands - Full-Stack Developer (June 2026-present). FlyRank AI - Frontend AI Engineering (June 2026-present).
 Projects: Gamification & Rewards Panel (SpeakUp Schools, React+TS+Vite, Node/Express 5, Prisma+Supabase, BullMQ+Redis, Supabase Realtime). InboxPilot AI (Gmail assistant, Gemini, Gmail API, React, Node/Express). Multilingual AI Medical Scribe (Urdu/Pashto, Whisper, pyannote, FastAPI, PostgreSQL, React). ReqAmbiguityAI (ambiguous requirement detection, pitched at IdeaRise). Spa App (full-stack). Habit Builder (habit tracker). Bakery App (requirement elicitation, UML modeling).
 Skills: HTML5, CSS3, JavaScript, React, MERN, MongoDB, ASP.NET Core/.NET, C#, C++, Java, MySQL, SQL Server, Requirement Elicitation, SRS, UML, Git/GitHub, n8n, Visual Studio, Android Studio, Cursor.
@@ -16,41 +18,40 @@ RULES:
 3. Never invent facts. If unsure, say she hasn't added that yet and suggest emailing her.
 4. Keep it tight, no filler.`;
 
+// Official Anthropic client initialize karein
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: "ANTHROPIC_API_KEY is not set on the server." });
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({ reply: "API Key missing on Vercel dashboard." });
   }
 
   try {
     const { messages } = req.body;
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 500,
-        system: SYSTEM_PROMPT,
-        messages: messages,
-      }),
+    // Format messages for Anthropic SDK
+    const formattedMessages = messages.map(msg => ({
+      role: msg.role === "bot" ? "assistant" : "user",
+      content: msg.text
+    }));
+
+    // Official SDK API call (Yeh header failure nahi hone deta)
+    const msg = await anthropic.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 500,
+      system: SYSTEM_PROMPT,
+      messages: formattedMessages,
     });
 
-    const data = await response.json();
-    
-    // Anthropic ka response data.content[0].text mein hota hai
-    const reply = data.content?.[0]?.text || "Sorry, I couldn't generate a reply just now.";
-
-    return res.status(200).json({ reply: reply });
+    return res.status(200).json({ reply: msg.content[0].text });
   } catch (err) {
-    return res.status(500).json({ error: "Something went wrong talking to the assistant." });
+    console.error(err);
+    return res.status(500).json({ reply: "Anthropic connection failed: " + err.message });
   }
 }
