@@ -1,19 +1,3 @@
-// Place this file at:  <your-project>/api/chat.js
-// (a new "api" folder at the project ROOT, same level as "src" — not inside src)
-//
-// This is a Vercel serverless function. It keeps your real Anthropic API key
-// on the server so it's never exposed to visitors in the browser.
-//
-// Setup:
-// 1. Get a free key at https://console.anthropic.com
-// 2. In Vercel: Project -> Settings -> Environment Variables
-//    Add: ANTHROPIC_API_KEY = your key
-// 3. Deploy. The chat widget will then work on the live site.
-//
-// Note: this will NOT work with plain `npm run dev` on localhost — Vite's
-// dev server doesn't run serverless functions. It only works once deployed
-// on Vercel (or locally via `vercel dev`, if you have the Vercel CLI).
-
 const SYSTEM_PROMPT = `You are the portfolio assistant on Alishba Nazem's personal website. Answer visitor questions ABOUT Alishba, warm and concise, human tone, 2-5 sentences unless asked for detail.
 
 FACTS ABOUT HER:
@@ -53,17 +37,19 @@ export default async function handler(req, res) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-  model: "claude-3-5-sonnet-20241022", // <-- Bilkul yeh naam copy-paste kar dein
-  max_tokens: 500,
-  system: SYSTEM_PROMPT,
-  messages,
-}),
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 500,
+        system: SYSTEM_PROMPT,
+        messages: messages,
+      }),
     });
 
     const data = await response.json();
-    const reply = (data.content || []).map((b) => b.text || "").join("\n").trim();
+    
+    // Anthropic ka response data.content[0].text mein hota hai
+    const reply = data.content?.[0]?.text || "Sorry, I couldn't generate a reply just now.";
 
-    return res.status(200).json({ reply: reply || "Sorry, I couldn't generate a reply just now." });
+    return res.status(200).json({ reply: reply });
   } catch (err) {
     return res.status(500).json({ error: "Something went wrong talking to the assistant." });
   }
