@@ -377,20 +377,23 @@ export default function AlishbaPortfolio() {
     setInput("");
     setLoading(true);
     try {
-      const history = newMessages.map((m) => ({ role: m.role === "bot" ? "assistant" : "user", content: m.text }));
-      const response = await fetch("api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, system: SYSTEM_PROMPT, messages: history }),
-      });
-      const data = await response.json();
-      const textBlock = (data.content || []).map((b) => b.text || "").join("\n").trim();
-      setMessages((prev) => [...prev, { role: "bot", text: textBlock || "Sorry, I couldn't quite get that — try asking again?" }]);
-    } catch (e) {
-      setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting right now — email Alishba directly at " + CONTACT.email }]);
-    } finally {
-      setLoading(false);
-    }
+    try {
+  // 1. URL ke shuru mein / lagayein aur body mein sirf messages bhejen
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages: history }), 
+  });
+  
+  const data = await response.json();
+  
+  // 2. data.reply ko use karein kyunki backend se 'reply' aa raha hai
+  setMessages((prev) => [...prev, { role: "bot", text: data.reply || "Sorry, I couldn't quite get that — try asking again?" }]);
+} catch (e) {
+  setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting right now — email Alishba directly at " + CONTACT.email }]);
+} finally {
+  setLoading(false);
+}
   };
 
   const navItems = [
