@@ -1,4 +1,9 @@
 // Place at: <project root>/api/chat.js  (NOT inside src/)
+//
+// Uses Google Gemini's free tier — no billing required.
+// Get a free key at https://aistudio.google.com/apikey
+// In Vercel: Project -> Settings -> Environment Variables
+//   Add: GEMINI_API_KEY = your key
 
 const SYSTEM_PROMPT = `You are the portfolio assistant on Alishba Nazem's personal website. Answer visitor questions ABOUT Alishba, warm and concise, human tone, 2-5 sentences unless asked for detail.
 
@@ -23,9 +28,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ reply: "Method not allowed" });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.error("Missing ANTHROPIC_API_KEY env var");
+    console.error("Missing GEMINI_API_KEY env var");
     return res.status(500).json({ reply: "Server misconfigured: API key missing." });
   }
 
@@ -35,36 +40,33 @@ export default async function handler(req, res) {
       return res.status(400).json({ reply: "Bad request: messages missing or not an array." });
     }
 
-    // Frontend sends { role, content } pairs already — pass straight through,
-    // just make sure content is always a plain string.
-    const anthropicMessages = messages.map((m) => ({
-      role: m.role === "assistant" ? "assistant" : "user",
-      content: String(m.content ?? ""),
+    // Gemini uses "model" instead of "assistant", and wraps text in parts[]
+    const contents = messages.map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: String(m.content ?? "") }],
     }));
 
-    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 500,
-        system: SYSTEM_PROMPT,
-        messages: anthropicMessages,
-      }),
-    });
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          generationConfig: { maxOutputTokens: 400 },
+        }),
+      }
+    );
 
-    const data = await anthropicRes.json();
+    const data = await geminiRes.json();
 
-    if (!anthropicRes.ok) {
-      console.error("Anthropic API error:", JSON.stringify(data));
-      return res.status(500).json({ reply: "Anthropic error: " + (data?.error?.message || "unknown error") });
+    if (!geminiRes.ok) {
+      console.error("Gemini API error:", JSON.stringify(data));
+      return res.status(500).json({ reply: "Gemini error: " + (data?.error?.message || "unknown error") });
     }
 
-    const reply = data.content?.[0]?.text || "Sorry, I couldn't generate a reply just now.";
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't generate a reply just now.";
     return res.status(200).json({ reply });
   } catch (err) {
     console.error("Handler crashed:", err);
