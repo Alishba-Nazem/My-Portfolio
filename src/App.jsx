@@ -377,28 +377,18 @@ export default function AlishbaPortfolio() {
     setInput("");
     setLoading(true);
     try {
-      const formattedHistory = history.map((msg) => ({
-        role: msg.role === "bot" ? "assistant" : "user",
-        text: msg.text,
-      }));
-
+      const history = newMessages.map((m) => ({ role: m.role === "bot" ? "assistant" : "user", content: m.text }));
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: formattedHistory }), 
+        body: JSON.stringify({ messages: history }),
       });
-      
       const data = await response.json();
-      
-      setMessages((prev) => [
-        ...prev, 
-        { role: "bot", text: data.reply || "Sorry, I couldn't quite get that — try asking again?" }
-      ]);
+      console.log("Chat API response:", data);
+      setMessages((prev) => [...prev, { role: "bot", text: data.reply || "Sorry, I couldn't quite get that — try asking again?" }]);
     } catch (e) {
-      setMessages((prev) => [
-        ...prev, 
-        { role: "bot", text: "I'm having trouble connecting right now — email Alishba directly at " + CONTACT.email }
-      ]);
+      console.error("Chat fetch failed:", e);
+      setMessages((prev) => [...prev, { role: "bot", text: "I'm having trouble connecting right now — email Alishba directly at " + CONTACT.email }]);
     } finally {
       setLoading(false);
     }
