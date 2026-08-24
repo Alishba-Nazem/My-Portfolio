@@ -5,9 +5,9 @@ import { useState, useEffect, useRef, Fragment } from "react";
    Leave a field empty ("") to hide that button/link automatically.
    ============================================================ */
 
-/* WHERE THE HERO VIDEO LIVES: public/hero-code.mp4  (720p, keep it small)
+/* WHERE THE HERO VIDEO LIVES: public/background_code.mp4  (local file, no remote delay)
    Poster shown while it loads: public/hero-poster.jpg */
-const HERO_VIDEO = "/hero-code.mp4";
+const HERO_VIDEO = "/background_code.mp4";
 const HERO_POSTER = "/hero-poster.jpg";
 
 const HEADLINE = "I build the frontend, the backend, and the AI automation that runs them.";
@@ -68,7 +68,7 @@ const PROJECTS = [
     stack: ["NLP", "Requirements Engineering"],
     link: "",
     live: "",
-    media: ["/projects/4f3dec09-11e3-4473-84c3-a1b484685a0c.jpg"],
+    media: ["/projects/reqambiguity-ai.mp4", "/projects/4f3dec09-11e3-4473-84c3-a1b484685a0c.jpg"],
   },
   {
     name: "Habit Tracker",
