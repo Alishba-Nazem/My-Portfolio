@@ -10,19 +10,76 @@ import { useState, useEffect, useRef, Fragment } from "react";
 const HERO_VIDEO = "/background_code.mp4";
 const HERO_POSTER = "/hero-poster.jpg";
 
-const HEADLINE = "I build the frontend, the backend, and the AI automation that runs them.";
+const HEADLINE = "I build practical, user-focused web and AI solutions that turn real problems into working digital products.";
+const ROLE = "Full-Stack Developer & AI Automation";
 
 const HERO_STATS = "8 projects · 4 internships · 2 automation systems in production · CGPA 3.78";
 
-/* For each project:
-   - `media`  : list of image/video paths from `public/projects/`. First = card thumbnail,
-                click opens a gallery with all of them. Empty array = initials placeholder.
-   - `stack`  : technologies, shown as chips on the card.
-   - `link`   : GitHub repo. `live` : deployed URL. Leave "" to hide the button. */
+/* Strongest-first order. `featured: true` projects get a deep case-study layout.
+   - `media`  : paths from `public/projects/`. First = thumbnail; click opens gallery.
+   - `link` / `live` : leave "" to hide the button. */
 const PROJECTS = [
   {
+    name: "AI Competitor Tracker",
+    featured: true,
+    sub: "Watches competitor shops on Shopify and Daraz for you. It saves a copy of their catalogue on a schedule, compares it to yesterday's, and tells you what changed in price or stock.",
+    tag: "Featured · Full-Stack / AI",
+    problem: "Online sellers lose deals because competitor prices and stock change constantly, and checking shops by hand does not scale.",
+    solution: "A scheduled scraper + dashboard that snapshots competitor catalogues, diffs them day over day, and surfaces price, stock, and review insights in one place.",
+    users: "E-commerce sellers and operators who need competitor awareness without manual checking.",
+    features: [
+      "Scheduled catalogue snapshots for Shopify and Daraz shops",
+      "Day-over-day price and stock change detection",
+      "Customer-review signal extraction for recurring complaints",
+      "Dashboard for trends, alerts, and product-level history",
+    ],
+    outcome: "A working full-stack system with NestJS APIs, Playwright scraping, Postgres storage, and a Next.js dashboard deployed for live use.",
+    stack: ["NestJS", "TypeScript", "Playwright", "Cheerio", "Prisma", "PostgreSQL", "Next.js", "Jest", "Railway"],
+    link: "https://github.com/Alishba-Nazem/AI-Competitor-Tracker",
+    live: "https://ai-competitor-tracker.vercel.app",
+    media: ["/projects/competitor-tracker.mp4"],
+  },
+  {
+    name: "ReqAmbiguityAI",
+    featured: true,
+    sub: "Requirements documents are full of vague wording that causes rework later. This flags the ambiguous lines before developers start building.",
+    tag: "Featured · AI / NLP",
+    problem: "Ambiguous requirements create late-stage rework. Teams build the wrong thing because the document never forced clarity.",
+    solution: "An NLP tool that scans requirement text, flags vague or underspecified lines, and helps teams clean the spec before development starts.",
+    features: [
+      "Detects ambiguous wording in requirement documents",
+      "Highlights lines that need clarification before build",
+      "Supports early quality checks in the requirements phase",
+    ],
+    outcome: "Pitched at the IdeaRise Startup Challenge and placed 2nd, proof that the problem and approach resonated with judges.",
+    stack: ["NLP", "Requirements Engineering"],
+    link: "",
+    live: "",
+    media: ["/projects/reqambiguity-ai.mp4", "/projects/4f3dec09-11e3-4473-84c3-a1b484685a0c.jpg"],
+  },
+  {
+    name: "InboxPilot AI",
+    featured: true,
+    sub: "Connects to your Gmail and tells you what actually needs attention: summaries, categories, deadlines, and questions in plain language.",
+    tag: "Featured · AI / Full-Stack",
+    problem: "Important mail gets buried. People waste time rereading long threads and still miss deadlines or action items.",
+    solution: "A Gmail-connected assistant that summarises threads, sorts mail into categories, extracts deadlines, and answers inbox questions in normal language.",
+    features: [
+      "Gmail OAuth connection and inbox access",
+      "Thread summaries and category sorting",
+      "Deadline and action-item extraction",
+      "Natural-language questions about your inbox",
+    ],
+    outcome: "A full-stack AI assistant integrating the Gmail API with Gemini for practical daily inbox triage.",
+    stack: ["React", "TypeScript", "Node / Express", "Gemini API", "Gmail API", "OAuth 2.0", "Tailwind CSS"],
+    link: "https://github.com/Alishba-Nazem/Inbox-Pilot-AI",
+    live: "",
+    media: ["/projects/capstone-project-video.mp4"],
+  },
+  {
     name: "AI Content Automation Dashboard",
-    sub: "An n8n agent picks a topic and writes the post. This dashboard is where you approve it or reject it with a reason. Every draft and every decision is stored, so you can see what the agent suggested and what you did about it.",
+    featured: false,
+    sub: "An n8n agent picks a topic and writes the post. This dashboard is where you approve it or reject it with a reason. Every draft and every decision is stored.",
     tag: "AI Automation",
     stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Prisma", "PostgreSQL", "n8n AI Agent"],
     link: "https://github.com/Alishba-Nazem/Auto-content-dashboard",
@@ -30,17 +87,9 @@ const PROJECTS = [
     media: ["/projects/autocontent.mp4"],
   },
   {
-    name: "AI Competitor Tracker",
-    sub: "Watches competitor shops on Shopify and Daraz for you. It saves a copy of their catalogue on a schedule, compares it to yesterday's, and tells you what changed in price or stock. It also reads their customer reviews to find what buyers keep complaining about.",
-    tag: "AI Automation",
-    stack: ["NestJS", "TypeScript", "Playwright", "Cheerio", "Prisma", "PostgreSQL", "Next.js", "Jest", "Railway"],
-    link: "https://github.com/Alishba-Nazem/AI-Competitor-Tracker",
-    live: "https://ai-competitor-tracker.vercel.app",
-    media: ["/projects/competitor-tracker.mp4"],
-  },
-  {
     name: "Gamification & Rewards Panel",
-    sub: "A real product for SpeakUp Schools, in use now. Students earn points and streaks for speaking practice and spend them on rewards. Scores update live, and the heavy counting happens in background jobs so the app stays fast.",
+    featured: false,
+    sub: "A real product for SpeakUp Schools, in use now. Students earn points and streaks for speaking practice and spend them on rewards.",
     tag: "Full-Stack · Client Work",
     stack: ["React", "TypeScript", "Vite", "Node / Express", "Prisma", "Supabase", "BullMQ", "Redis"],
     link: "https://github.com/scaleupbrands-dev/English-speaking-school-Gamification-panel-",
@@ -53,26 +102,9 @@ const PROJECTS = [
     ],
   },
   {
-    name: "InboxPilot AI",
-    sub: "Connects to your Gmail and tells you what actually needs attention. It summarises long threads, sorts mail into categories, pulls out deadlines and action items, and lets you ask questions about your inbox in normal language.",
-    tag: "AI / Full-Stack",
-    stack: ["React", "TypeScript", "Node / Express", "Gemini API", "Gmail API", "OAuth 2.0", "Tailwind CSS"],
-    link: "https://github.com/Alishba-Nazem/Inbox-Pilot-AI",
-    live: "",
-    media: ["/projects/capstone-project-video.mp4"],
-  },
-  {
-    name: "ReqAmbiguityAI",
-    sub: "Requirements documents are full of vague wording that causes rework later. This flags the ambiguous lines before developers start building. I pitched it at the IdeaRise Startup Challenge and came 2nd.",
-    tag: "AI / NLP",
-    stack: ["NLP", "Requirements Engineering"],
-    link: "",
-    live: "",
-    media: ["/projects/reqambiguity-ai.mp4", "/projects/4f3dec09-11e3-4473-84c3-a1b484685a0c.jpg"],
-  },
-  {
     name: "Habit Tracker",
-    sub: "A habit tracker with a dashboard, habit creation and progress views. No framework, no libraries, just HTML, CSS and JavaScript. This was me learning how the basics work.",
+    featured: false,
+    sub: "A habit tracker with a dashboard, habit creation and progress views. No framework, just HTML, CSS and JavaScript.",
     tag: "Frontend",
     stack: ["HTML5", "CSS3", "JavaScript"],
     link: "https://github.com/Alishba-Nazem/Habit-Tracker-website",
@@ -81,7 +113,8 @@ const PROJECTS = [
   },
   {
     name: "Spa Booking App",
-    sub: "A mobile app for browsing spa treatments and booking a slot. My first proper Flutter build, and where I learned mobile layout the hard way.",
+    featured: false,
+    sub: "A mobile app for browsing spa treatments and booking a slot. My first proper Flutter build.",
     tag: "Mobile",
     stack: ["Flutter", "Dart"],
     link: "",
@@ -99,7 +132,8 @@ const PROJECTS = [
   },
   {
     name: "Bakery App",
-    sub: "A bakery storefront I took from requirements and UML diagrams through to a working interface, using AI tooling to move faster. A university project that made the documentation side click for me.",
+    featured: false,
+    sub: "A bakery storefront from requirements and UML through to a working interface, using AI tooling to move faster.",
     tag: "Frontend",
     stack: ["Manus AI", "Requirement Elicitation", "UML"],
     link: "",
@@ -116,6 +150,10 @@ const PROJECTS = [
     ],
   },
 ];
+
+const FEATURED = PROJECTS.filter((p) => p.featured);
+const OTHER_PROJECTS = PROJECTS.filter((p) => !p.featured);
+const projectIndexOf = (name) => PROJECTS.findIndex((p) => p.name === name);
 
 const isVideo = (path) => /\.(mp4|webm|mov)$/i.test(path);
 
@@ -161,19 +199,19 @@ const EXPERIENCE = [
   {
     role: "AI Automation Intern",
     org: "Dafi Labs",
-    time: "2026 — Present",
+    time: "2026 to Present",
     note: "Building AI agent workflows and automation pipelines.",
   },
   {
     role: "Full-Stack Developer",
     org: "ScaleUp Brands",
-    time: "June 2026 — Present",
+    time: "June 2026 to Present",
     note: "Shipping the gamification & rewards panel for SpeakUp Schools.",
   },
   {
     role: "Frontend AI Engineering",
     org: "FlyRank AI",
-    time: "June 2026 — Present",
+    time: "June 2026 to Present",
     note: "Building AI-facing product interfaces.",
   },
   {
@@ -185,17 +223,17 @@ const EXPERIENCE = [
 ];
 
 const EDUCATION = [
-  { degree: "BS Software Engineering", school: "University of Gujrat, Pakistan", years: "2023 — 2027", score: "CGPA 3.78 / 4.0 · 6th semester done" },
-  { degree: "FSc Pre-Engineering", school: "Superior Group of Colleges, Kotla Arab Ali Khan", years: "2021 — 2023", score: "960 / 1100" },
-  { degree: "Matriculation in Science", school: "Govt. Girls High School, Sidh", years: "2019 — 2021", score: "1100 / 1100" },
+  { degree: "BS Software Engineering", school: "University of Gujrat, Pakistan", years: "2023 to 2027", score: "CGPA 3.78 / 4.0 · 6th semester done" },
+  { degree: "FSc Pre-Engineering", school: "Superior Group of Colleges, Kotla Arab Ali Khan", years: "2021 to 2023", score: "960 / 1100" },
+  { degree: "Matriculation in Science", school: "Govt. Girls High School, Sidh", years: "2019 to 2021", score: "1100 / 1100" },
 ];
 
 const ACHIEVEMENTS = [
-  "2nd Position — IdeaRise Startup Challenge",
+  "2nd Position, IdeaRise Startup Challenge",
   "Google Foundations of Project Management (Coursera)",
   "Google UX Specialization (Coursera)",
   "Google AI Prompting Essentials (Coursera)",
-  "Matriculation topper — 1100 / 1100 marks",
+  "Matriculation topper, 1100 / 1100 marks",
 ];
 
 const HOBBIES = ["Book reading", "Badminton", "TEDx talks", "Learning languages on Duolingo"];
@@ -221,7 +259,7 @@ const describeProject = (name) => {
   const p = projectByName(name);
   if (!p) return "";
   const links = [p.link && `Code: ${p.link}`, p.live && `Live: ${p.live}`].filter(Boolean).join(" · ");
-  return `${p.name} — ${p.sub}\n\nBuilt with ${p.stack.join(", ")}.${links ? `\n${links}` : ""}`;
+  return `${p.name}: ${p.sub}\n\nBuilt with ${p.stack.join(", ")}.${links ? `\n${links}` : ""}`;
 };
 
 /* Patterns deliberately match word *prefixes* (no trailing \b) so "skill" also
@@ -239,8 +277,8 @@ const KNOWLEDGE = [
   {
     match: /\b(only|just)\b.*\bfront ?end\b|\bfront ?end\b.*\b(only|just)\b/i,
     answer: () =>
-      `No — she's full-stack and also builds AI automation. She writes the front end (React, Next.js, TypeScript), ` +
-      `the back end (Node, Express, NestJS), and the data layer (PostgreSQL via Prisma) — then adds AI agents and n8n ` +
+      `No, she's full-stack and also builds AI automation. She writes the front end (React, Next.js, TypeScript), ` +
+      `the back end (Node, Express, NestJS), and the data layer (PostgreSQL via Prisma), then adds AI agents and n8n ` +
       `workflows on top. The AI Competitor Tracker is a good example: a NestJS backend with Playwright scrapers, ` +
       `scheduled jobs, Jest tests, and a Next.js frontend.`,
   },
@@ -249,10 +287,10 @@ const KNOWLEDGE = [
     // swallowed by the "role" or "hire" keywords further down.
     match: /\b(good fit|qualified|should (i|we) hire|right person|suitable|recommend)/i,
     answer: () =>
-      `That's really her work's call rather than mine — but here's the relevant part: she's full-stack (React/Next, ` +
+      `That's really her work's call rather than mine, but here's the relevant part: she's full-stack (React/Next, ` +
       `Node/NestJS, PostgreSQL) with production AI automation experience (n8n agent workflows, Playwright scrapers, ` +
       `scheduled jobs), four internships this year, and a live client product. Best way to judge is the Projects ` +
-      `section or a direct conversation — ${CONTACT.email}.`,
+      `section or a direct conversation: ${CONTACT.email}.`,
   },
   {
     match: /\b(competitor|tracker|daraz|shopify)|e.?commerce/i,
@@ -273,10 +311,10 @@ const KNOWLEDGE = [
   {
     match: /\b(project|portfolio|buil|showcase)/i,
     answer: () =>
-      `She has ${PROJECTS.length} projects on the site. The strongest ones:\n\n` +
-      PROJECTS.slice(0, 4).map((p) => `• ${p.name} — ${p.tag}. ${p.stack.slice(0, 4).join(", ")}.`).join("\n") +
-      `\n\nAlso ReqAmbiguityAI (NLP, 2nd place at IdeaRise), a Habit Tracker, a Flutter spa booking app, and a bakery storefront. ` +
-      `Scroll to the Projects section for demos and GitHub links.`,
+      `She has ${PROJECTS.length} projects on the site. The strongest ones lead:\n\n` +
+      FEATURED.map((p) => `• ${p.name}: ${p.tag}. ${p.stack.slice(0, 4).join(", ")}.`).join("\n") +
+      `\n\nAlso supporting work like the content automation dashboard, a gamification panel for SpeakUp Schools, a Habit Tracker, a Flutter spa booking app, and a bakery storefront. ` +
+      `Scroll to Featured Projects for case studies, or ask about a specific one.`,
   },
   {
     match: /\b(skill|tech|stack|technolog|language|know|framework|tool|react|node|python|database|sql)/i,
@@ -288,12 +326,12 @@ const KNOWLEDGE = [
     match: /\b(experience|intern|job|work|compan|employ|career)/i,
     answer: () =>
       `Four roles this year:\n\n` +
-      EXPERIENCE.map((e) => `• ${e.role} at ${e.org} (${e.time}) — ${e.note}`).join("\n"),
+      EXPERIENCE.map((e) => `• ${e.role} at ${e.org} (${e.time}): ${e.note}`).join("\n"),
   },
   {
     match: /\b(education|degree|universit|colleg|stud|cgpa|gpa|academic|school|semester|graduat)/i,
     answer: () =>
-      `${EDUCATION.map((e) => `• ${e.degree}, ${e.school} (${e.years}) — ${e.score}`).join("\n")}\n\n` +
+      `${EDUCATION.map((e) => `• ${e.degree}, ${e.school} (${e.years}): ${e.score}`).join("\n")}\n\n` +
       `She's currently in her BS Software Engineering programme at the University of Gujrat.`,
   },
   {
@@ -320,7 +358,7 @@ const KNOWLEDGE = [
     match: /\b(introduc|summar|role)|\b(who|about|yourself|herself)\b|tell me|what does she do/i,
     answer: () =>
       `Alishba Nazem is a Software Engineering student and a full-stack developer who also builds AI automation. ` +
-      `She builds React and Next.js front ends, Node/Express/NestJS APIs and PostgreSQL data layers — then wires ` +
+      `She builds React and Next.js front ends, Node/Express/NestJS APIs and PostgreSQL data layers, then wires ` +
       `AI agents and n8n workflows on top so repetitive work runs on a schedule.\n\n` +
       `Right now she's juggling four internships plus a live client product, with a 3.78/4.0 CGPA.`,
   },
@@ -331,7 +369,7 @@ function offlineAnswer(question) {
   if (hit) return hit.answer();
   return (
     `I can tell you about her projects, skills, automation work, experience, education, achievements, or how to ` +
-    `get in touch — just ask. For anything else, ${CONTACT.email} is the fastest route.`
+    `get in touch, just ask. For anything else, ${CONTACT.email} is the fastest route.`
   );
 }
 
@@ -431,8 +469,9 @@ body{margin:0; background:var(--bg);}
 
 /* Foreground stays fully sharp: no filter is inherited here, and the shadows
    are only tight enough to seat the text against the moving texture. */
-.ap-hero-name{font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:3.5px; text-transform:uppercase; color:rgba(255,255,255,.8); margin-bottom:20px;}
-.ap-hero h1{font-size:clamp(32px,4.6vw,58px); font-weight:700; line-height:1.1; margin:0 0 24px; letter-spacing:-1px; color:#fff; max-width:19ch; text-shadow:0 2px 16px rgba(0,0,0,.7);}
+.ap-hero-name{font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:3.5px; text-transform:uppercase; color:rgba(255,255,255,.8); margin-bottom:10px;}
+.ap-hero-role{font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.4px; color:var(--accent); margin:0 0 18px;}
+.ap-hero h1{font-size:clamp(28px,4.2vw,48px); font-weight:700; line-height:1.15; margin:0 0 20px; letter-spacing:-.8px; color:#fff; max-width:22ch; text-shadow:0 2px 16px rgba(0,0,0,.7);}
 .ap-hero p.lead{font-size:17px; line-height:1.75; color:rgba(255,255,255,.92); max-width:52ch; margin:0 0 34px; text-shadow:0 1px 10px rgba(0,0,0,.75);}
 .ap-hero p.lead b{color:#fff; font-weight:600;}
 
@@ -443,6 +482,11 @@ body{margin:0; background:var(--bg);}
 .ap-link-action{background:none; border:none; padding:0 0 3px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:13.5px; font-weight:500; color:#fff; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-bottom:2px solid var(--accent); transition:color .18s ease, border-color .18s ease;}
 .ap-link-action span{transition:transform .18s ease;}
 .ap-link-action:hover{color:var(--accent); border-color:var(--accent);}
+/* "Get in Touch" is the funnel's second CTA — coloured with the site's live
+   accent by default (not just on hover) so it visually matches every other
+   accent-coloured element instead of blending into the plain white links. */
+.ap-link-action.ap-accent{color:var(--accent); border-color:var(--accent);}
+.ap-link-action.ap-accent:hover{color:var(--accent-fill-h); border-color:var(--accent-fill-h);}
 .ap-link-action:hover span{transform:translateX(4px);}
 .ap-hero-meta{display:flex; flex-direction:column; gap:9px; padding-top:26px; border-top:1px solid rgba(255,255,255,.2);}
 .ap-hero-stats{font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,.82); letter-spacing:.2px;}
@@ -498,6 +542,65 @@ body{margin:0; background:var(--bg);}
 .ap-proj-link:hover{color:var(--accent-fill-h);}
 .ap-proj-count{position:absolute; bottom:8px; right:10px; background:rgba(11,9,18,.85); color:var(--ink); font-size:10.5px; padding:3px 9px; border-radius:100px; font-family:'JetBrains Mono',monospace;}
 
+/* ---------- FEATURED CASE STUDIES ---------- */
+.ap-case{display:grid; grid-template-columns:1.05fr 1fr; gap:36px; align-items:start; padding:28px; margin-bottom:28px; background:var(--surface); border:1px solid var(--border); border-radius:20px;}
+.ap-case:nth-child(even){grid-template-columns:1fr 1.05fr;}
+.ap-case:nth-child(even) .ap-case-media{order:2;}
+.ap-case:nth-child(even) .ap-case-body{order:1;}
+.ap-case-media{border-radius:14px; overflow:hidden; border:1px solid var(--border); background:var(--surface-2); min-height:240px;}
+.ap-case-media .ap-proj-media{height:280px; border-bottom:none;}
+.ap-case-body h3{margin:0 0 10px; font-size:clamp(22px,2.4vw,28px);}
+.ap-case-body > .lead{margin:0 0 18px; font-size:14.5px; line-height:1.7; color:var(--ink-soft);}
+.ap-case-block{margin-bottom:14px;}
+.ap-case-block b{display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; font-weight:500;}
+.ap-case-block p,.ap-case-block li{margin:0; font-size:14px; line-height:1.65; color:var(--ink-soft);}
+.ap-case-block ul{margin:0; padding-left:18px;}
+.ap-case-block li{margin-bottom:4px;}
+.ap-case-ctas{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; align-items:center;}
+.ap-section-cta{display:flex; justify-content:center; margin-top:36px;}
+.ap-btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--border); padding:12px 22px; border-radius:4px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif; transition:border-color .18s ease, color .18s ease;}
+.ap-btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+
+/* ---------- CONTACT FORM ----------
+   Card and form now share the same surface, border and radius so the two
+   columns read as one matched pair instead of a bright orange block sitting
+   next to a plain dark one. Stretch alignment plus flex column on both
+   children keeps them the same height, so the bottom edge lines up instead
+   of one panel trailing off short. */
+.ap-contact-grid{display:grid; grid-template-columns:1fr 1.1fr; gap:28px; align-items:stretch;}
+.ap-contact-card{background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px; color:var(--ink); text-align:left; display:flex; flex-direction:column; justify-content:space-between;}
+.ap-contact-card h2{color:var(--ink); margin:0 0 12px; font-size:clamp(24px,3.2vw,32px);}
+.ap-contact-card p{color:var(--ink-soft); margin:0 0 24px; font-size:15px; max-width:520px; line-height:1.7;}
+.ap-contact-links{display:flex; gap:12px; flex-wrap:wrap;}
+.ap-contact-links a{background:var(--accent-fill); border:1px solid var(--accent-fill); color:var(--on-accent); padding:12px 22px; border-radius:100px; font-size:14px; font-weight:600; text-decoration:none; cursor:pointer; transition:transform .2s ease, background .2s ease;}
+.ap-contact-links a:hover{background:var(--accent-fill-h); border-color:var(--accent-fill-h); transform:translateY(-3px);}
+.ap-form{background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; display:flex; flex-direction:column;}
+.ap-form h3{margin:0 0 6px; font-size:20px;}
+.ap-form .hint{margin:0 0 20px; font-size:13.5px; color:var(--ink-soft);}
+.ap-field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
+.ap-field label{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft);}
+.ap-field input,.ap-field textarea{background:var(--surface-2); border:1px solid var(--border); border-radius:8px; color:var(--ink); padding:12px 14px; font-size:14px; font-family:'Inter',sans-serif; outline:none; resize:vertical; transition:border-color .18s ease;}
+.ap-field input:focus,.ap-field textarea:focus{border-color:var(--accent);}
+/* Both status colours stay inside the site's warm amber family — the earlier
+   cyan for "sent" read as an unrelated blue dropped in next to an orange
+   theme, which is exactly the inconsistency the palette is meant to avoid. */
+.ap-form-ok{margin-top:12px; font-size:13.5px; color:var(--accent);}
+.ap-form-error{margin-top:12px; font-size:13.5px; color:#F2665C;}
+.ap-btn-solid:disabled{opacity:.65; cursor:not-allowed;}
+/* ---------- FOOTER / SIGN-OFF ----------
+   One bordered block, not two loose pieces of text after Contact. The claim
+   repeats once more here (bookending the hero) then hands off to the small
+   credit line, separated by its own divider so the whole thing reads as a
+   single closing section instead of stray copy trailing off the page. */
+.ap-footer{position:relative; z-index:1; border-top:1px solid var(--border); background:var(--surface); padding:64px 6vw 28px; text-align:center;}
+.ap-signoff-line{font-family:'Space Grotesk',sans-serif; font-size:clamp(19px,2.4vw,26px); font-weight:600; line-height:1.5; color:var(--ink); margin:0 0 22px;}
+.ap-signoff-line b{color:var(--accent); font-weight:700;}
+.ap-signoff-mark{display:inline-flex; align-items:baseline; gap:2px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:22px; letter-spacing:.3px; color:var(--ink); cursor:pointer; padding:4px 2px; transition:letter-spacing .2s ease; background:none; border:none;}
+.ap-signoff-mark span{color:var(--accent);}
+.ap-signoff-mark:hover{letter-spacing:1.5px;}
+.ap-signoff-sub{margin:10px 0 0; font-size:12.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;}
+.ap-footer-credit{margin:36px auto 0; padding-top:20px; border-top:1px solid var(--border); max-width:320px; font-size:12.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;}
+
 /* ---------- EXPERIENCE / EDUCATION ---------- */
 .ap-card-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:18px;}
 .ap-exp-card,.ap-edu-card{background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px; border-left:3px solid var(--accent); transition:transform .2s ease;}
@@ -513,17 +616,6 @@ body{margin:0; background:var(--bg);}
 .ap-hobby-row{display:flex; flex-wrap:wrap; gap:10px;}
 .ap-hobby-chip{background:var(--surface); border:1px solid var(--border); padding:11px 20px; border-radius:100px; font-size:14px; font-weight:500; transition:transform .2s ease, background .2s ease, color .2s ease;}
 .ap-hobby-chip:hover{background:var(--accent-fill); border-color:var(--accent-fill); color:var(--on-accent); transform:translateY(-3px);}
-
-/* ---------- CONTACT ----------
-   A full-width block in bright amber would shout, so the closing panel uses the
-   deep burnt orange from the video's darker highlights and carries white text. */
-.ap-contact-card{background:var(--accent-deep); border-radius:26px; padding:54px 6vw; color:#fff; text-align:center;}
-.ap-contact-card h2{color:#fff; margin:0 0 12px; font-size:clamp(26px,3.6vw,38px);}
-.ap-contact-card p{color:rgba(255,255,255,.88); margin:0 auto 28px; font-size:15.5px; max-width:520px; line-height:1.7;}
-.ap-contact-links{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
-.ap-contact-links a{background:#fff; border:1px solid #fff; color:var(--on-accent); padding:12px 22px; border-radius:100px; font-size:14px; font-weight:600; text-decoration:none; cursor:pointer; transition:transform .2s ease, background .2s ease;}
-.ap-contact-links a:hover{background:var(--accent-fill); border-color:var(--accent-fill); color:var(--on-accent); transform:translateY(-3px);}
-.ap-footer{text-align:center; padding:30px 6vw 34px; font-size:12.5px; color:var(--ink-soft); position:relative; z-index:1; font-family:'JetBrains Mono',monospace;}
 
 /* ---------- CHAT ---------- */
 .ap-chat-fab{position:fixed; bottom:26px; right:26px; z-index:120; width:56px; height:56px; border-radius:50%; background:var(--accent-fill); color:var(--on-accent); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 28px -10px rgba(242,161,98,.55); transition:transform .2s ease, background .2s ease;}
@@ -574,6 +666,9 @@ body{margin:0; background:var(--bg);}
 @media(max-width:900px){
   .ap-hero h1{max-width:none;}
   .ap-hero{padding-top:112px;}
+  .ap-case,.ap-case:nth-child(even){grid-template-columns:1fr;}
+  .ap-case:nth-child(even) .ap-case-media,.ap-case:nth-child(even) .ap-case-body{order:unset;}
+  .ap-contact-grid{grid-template-columns:1fr;}
 }
 @media(max-width:860px){
   .ap-links{display:none;}
@@ -756,6 +851,8 @@ export default function AlishbaPortfolio() {
   const [loading, setLoading] = useState(false);
   const chatBodyRef = useRef(null);
   const [gallery, setGallery] = useState(null); // { projectIndex, mediaIndex } | null
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [formStatus, setFormStatus] = useState("idle"); // idle | sending | sent | error | fallback
 
   const openGallery = (projectIndex) => setGallery({ projectIndex, mediaIndex: 0 });
   const closeGallery = () => setGallery(null);
@@ -767,6 +864,52 @@ export default function AlishbaPortfolio() {
     const total = PROJECTS[g.projectIndex].media.length;
     return { ...g, mediaIndex: (g.mediaIndex - 1 + total) % total };
   });
+
+  /* Sends straight to CONTACT.email via Web3Forms (free, no backend needed) —
+     the visitor never leaves the page and no email client has to pop up.
+     Requires VITE_WEB3FORMS_KEY (see .env.example). Without a key, or if the
+     request fails, it falls back to opening a pre-filled mailto: so the form
+     still works either way. */
+  const submitContact = async (e) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
+
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
+    if (accessKey) {
+      setFormStatus("sending");
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: accessKey,
+            subject: `Portfolio contact from ${form.name.trim()}`,
+            from_name: form.name.trim(),
+            email: form.email.trim(),
+            message: form.message.trim(),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          setForm({ name: "", email: "", message: "" });
+          setFormStatus("sent");
+          return;
+        }
+        throw new Error(data.message || "Send failed");
+      } catch {
+        setFormStatus("error");
+        return;
+      }
+    }
+
+    // No key configured yet — fall back to the visitor's own email client.
+    const subject = encodeURIComponent(`Portfolio contact from ${form.name.trim()}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name.trim()}\nEmail: ${form.email.trim()}\n\n${form.message.trim()}`
+    );
+    window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
+    setFormStatus("fallback");
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -863,29 +1006,30 @@ export default function AlishbaPortfolio() {
 
         <div className="ap-hero-inner">
           <div className="ap-hero-name">Alishba Nazem</div>
+          <div className="ap-hero-role">{ROLE}</div>
           <h1>{HEADLINE}</h1>
           <p className="lead">
-            Software engineering student in Pakistan. I'm doing <b>four internships</b> right now
-            and shipping a live product for a language school. Mostly React, NestJS and Postgres,
-            with <b>n8n agents</b> handling the parts nobody wants to do by hand.
+            Software engineering student building <b>full-stack products</b> and
+            <b> AI automation</b> that solve real problems not just demos.
+            Four internships this year, and a live client product in production.
           </p>
           <div className="ap-hero-ctas">
+            <button className="ap-btn-solid" onClick={() => scrollTo("projects")}>
+              View My Work <span>&rarr;</span>
+            </button>
             {CONTACT.resume && (
-              <a className="ap-btn-solid" href={CONTACT.resume} download>
-                Download résumé <DownloadIcon />
+              <a className="ap-link-action" href={CONTACT.resume} download>
+                Download résumé <span>&rarr;</span>
               </a>
             )}
-            <button className="ap-link-action" onClick={() => scrollTo("projects")}>
-              see the work <span>&rarr;</span>
+            <button className="ap-link-action ap-accent" onClick={() => scrollTo("contact")}>
+              Get in Touch <span>&rarr;</span>
             </button>
-            <a className="ap-link-action" href={`mailto:${CONTACT.email}`}>
-              email me <span>&rarr;</span>
-            </a>
           </div>
           <div className="ap-hero-meta">
             <div className="ap-hero-stats">{HERO_STATS}</div>
             <div className="ap-hero-avail">
-              <i />open to internships and full-time roles · Gujrat, PK
+              <i />open to Remote Part Time or Freelance Work · Gujrat, PK
             </div>
           </div>
         </div>
@@ -909,15 +1053,90 @@ export default function AlishbaPortfolio() {
         </div>
       </section>
 
-      {/* PROJECTS */}
+      {/* FEATURED CASE STUDIES — strongest first */}
       <section id="projects" className="ap-section">
-        <Reveal><div className="ap-eyebrow">Projects</div></Reveal>
-        <Reveal delay={80}><h2 className="ap-h2">{PROJECTS.length} things I've built, newest first</h2></Reveal>
+        <Reveal><div className="ap-eyebrow">Featured Projects</div></Reveal>
+        <Reveal delay={80}><h2 className="ap-h2">Strongest work first</h2></Reveal>
+        <p style={{ margin: "-18px 0 28px", color: "var(--ink-soft)", maxWidth: "54ch", lineHeight: 1.7 }}>
+          Selected projects that best show full-stack development, AI problem-solving, and shipped outcomes.
+        </p>
+
+        {FEATURED.map((p, i) => (
+          <Reveal key={p.name} delay={i * 70}>
+            <article className="ap-case">
+              <div className="ap-case-media">
+                <ProjectThumb project={p} onOpen={() => openGallery(projectIndexOf(p.name))} />
+              </div>
+              <div className="ap-case-body">
+                <span className="ap-tag">{p.tag}</span>
+                <h3>{p.name}</h3>
+                <p className="lead">{p.sub}</p>
+
+                <div className="ap-case-block">
+                  <b>Problem</b>
+                  <p>{p.problem}</p>
+                </div>
+                <div className="ap-case-block">
+                  <b>Solution</b>
+                  <p>{p.solution}</p>
+                </div>
+                {p.users && (
+                  <div className="ap-case-block">
+                    <b>Target users</b>
+                    <p>{p.users}</p>
+                  </div>
+                )}
+                <div className="ap-case-block">
+                  <b>Key features</b>
+                  <ul>
+                    {p.features.map((f) => <li key={f}>{f}</li>)}
+                  </ul>
+                </div>
+                <div className="ap-case-block">
+                  <b>Outcome</b>
+                  <p>{p.outcome}</p>
+                </div>
+                <div className="ap-stack-row">
+                  {p.stack.map((s) => <span className="ap-stack-chip" key={s}>{s}</span>)}
+                </div>
+                <div className="ap-case-ctas">
+                  {p.live && (
+                    <a className="ap-btn-solid" href={p.live} target="_blank" rel="noreferrer">
+                      View Live Demo
+                    </a>
+                  )}
+                  {p.link && (
+                    <a className="ap-btn-ghost" href={p.link} target="_blank" rel="noreferrer">
+                      GitHub
+                    </a>
+                  )}
+                  {!p.live && !p.link && (
+                    <button className="ap-btn-ghost" onClick={() => openGallery(projectIndexOf(p.name))}>
+                      View Project Evidence
+                    </button>
+                  )}
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        ))}
+
+        <div className="ap-section-cta">
+          <button className="ap-btn-ghost" onClick={() => scrollTo("more-projects")}>
+            View All Projects <span>&rarr;</span>
+          </button>
+        </div>
+      </section>
+
+      {/* OTHER PROJECTS */}
+      <section id="more-projects" className="ap-section">
+        <Reveal><div className="ap-eyebrow">More work</div></Reveal>
+        <Reveal delay={80}><h2 className="ap-h2">Other projects</h2></Reveal>
         <div className="ap-proj-grid">
-          {PROJECTS.map((p, i) => (
+          {OTHER_PROJECTS.map((p, i) => (
             <Reveal key={p.name} delay={i * 60}>
               <div className="ap-proj-card">
-                <ProjectThumb project={p} onOpen={() => openGallery(i)} />
+                <ProjectThumb project={p} onOpen={() => openGallery(projectIndexOf(p.name))} />
                 <div className="ap-proj-body">
                   <span className="ap-tag">{p.tag}</span>
                   <h4>{p.name}</h4>
@@ -934,6 +1153,11 @@ export default function AlishbaPortfolio() {
             </Reveal>
           ))}
         </div>
+        <div className="ap-section-cta">
+          <button className="ap-btn-solid" onClick={() => scrollTo("contact")}>
+            Contact Me
+          </button>
+        </div>
       </section>
 
       {/* SKILLS */}
@@ -949,6 +1173,11 @@ export default function AlishbaPortfolio() {
               </div>
             </Reveal>
           ))}
+        </div>
+        <div className="ap-section-cta">
+          <button className="ap-btn-ghost" onClick={() => scrollTo("projects")}>
+            Explore My Projects <span>&rarr;</span>
+          </button>
         </div>
       </section>
 
@@ -1003,6 +1232,11 @@ export default function AlishbaPortfolio() {
             </div>
           </Reveal>
         </div>
+        <div className="ap-section-cta">
+          <button className="ap-btn-solid" onClick={() => scrollTo("projects")}>
+            View My Work
+          </button>
+        </div>
       </section>
 
       {/* EDUCATION */}
@@ -1042,24 +1276,99 @@ export default function AlishbaPortfolio() {
       {/* CONTACT */}
       <section id="contact" className="ap-section">
         <Reveal>
-          <div className="ap-contact-card">
-            <h2>Say hello</h2>
-            <p>
-              If you need someone who can take a feature from an empty file all the way to deployed,
-              email me. I reply the same day. The assistant in the corner can answer questions first
-              if you'd rather.
-            </p>
-            <div className="ap-contact-links">
-              <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-              <a href={CONTACT.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-              {CONTACT.github && <a href={CONTACT.github} target="_blank" rel="noreferrer">GitHub</a>}
-              {CONTACT.resume && <a href={CONTACT.resume} download>Download résumé</a>}
+          <div className="ap-contact-grid">
+            <div className="ap-contact-card">
+              <h2>Get in Touch</h2>
+              <p>
+                Recruiters, clients, and collaborators: if you need someone who can take a
+                feature from an empty file all the way to deployed, let's talk. I reply the same day.
+              </p>
+              <div className="ap-contact-links">
+                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                <a href={CONTACT.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+                {CONTACT.github && <a href={CONTACT.github} target="_blank" rel="noreferrer">GitHub</a>}
+                {CONTACT.resume && <a href={CONTACT.resume} download>Download résumé</a>}
+              </div>
             </div>
+
+            <form className="ap-form" onSubmit={submitContact}>
+              <h3>Send a message</h3>
+              <p className="hint">Name, email, and message. It comes straight to my inbox.</p>
+              <div className="ap-field">
+                <label htmlFor="c-name">Name</label>
+                <input
+                  id="c-name"
+                  name="name"
+                  required
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="ap-field">
+                <label htmlFor="c-email">Email</label>
+                <input
+                  id="c-email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  placeholder="you@email.com"
+                />
+              </div>
+              <div className="ap-field">
+                <label htmlFor="c-message">Message</label>
+                <textarea
+                  id="c-message"
+                  name="message"
+                  required
+                  rows={5}
+                  value={form.message}
+                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                  placeholder="What are you working on?"
+                />
+              </div>
+              <button
+                type="submit"
+                className="ap-btn-solid"
+                style={{ width: "100%", justifyContent: "center" }}
+                disabled={formStatus === "sending"}
+              >
+                {formStatus === "sending" ? "Sending…" : "Send Message"}
+              </button>
+              {formStatus === "sent" && (
+                <p className="ap-form-ok">Message sent. Thanks! I reply the same day.</p>
+              )}
+              {formStatus === "fallback" && (
+                <p className="ap-form-ok">Opening your email app… if nothing opens, write directly to {CONTACT.email}.</p>
+              )}
+              {formStatus === "error" && (
+                <p className="ap-form-error">Couldn't send that. Email me directly at {CONTACT.email}.</p>
+              )}
+            </form>
           </div>
         </Reveal>
       </section>
 
-      <div className="ap-footer">Built by Alishba Nazem · React + Vite</div>
+      {/* FOOTER — sign-off (repeats the claim once) plus the small credit line,
+          in one bordered block so it reads as a closing section, not two
+          loose bits of text trailing off after Contact. */}
+      <footer className="ap-footer">
+        <Reveal>
+          <p className="ap-signoff-line">
+            Real problems, <b>working products</b>. That's the whole pitch.
+            If it stuck, remember the name.
+          </p>
+          <button className="ap-signoff-mark" onClick={() => scrollTo("home")}>
+            alishba<span>.dev</span>
+          </button>
+          <p className="ap-signoff-sub">Come back anytime. The work here keeps shipping.</p>
+          <p className="ap-footer-credit">Built by Alishba Nazem · React + Vite</p>
+        </Reveal>
+      </footer>
 
       {/* AI CHAT WIDGET */}
       <button className="ap-chat-fab" onClick={() => setChatOpen((o) => !o)} aria-label="Open AI assistant">
