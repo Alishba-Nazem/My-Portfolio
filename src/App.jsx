@@ -600,6 +600,9 @@ body{margin:0; background:var(--bg);}
 .ap-signoff-mark:hover{letter-spacing:1.5px;}
 .ap-signoff-sub{margin:10px 0 0; font-size:12.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;}
 .ap-footer-credit{margin:36px auto 0; padding-top:20px; border-top:1px solid var(--border); max-width:320px; font-size:12.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;}
+.ap-footer-badge{display:flex; justify-content:center; margin:22px 0 0; padding:0 12px;}
+.ap-footer-badge a{max-width:100%; transition:transform .2s ease, box-shadow .2s ease;}
+.ap-footer-badge a:hover{transform:translateY(-2px); box-shadow:0 8px 18px -12px rgba(0,0,0,.55);}
 
 /* ---------- EXPERIENCE / EDUCATION ---------- */
 .ap-card-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:18px;}
@@ -838,6 +841,49 @@ function DownloadIcon() {
     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M4 21h16" />
     </svg>
+  );
+}
+
+/* Official FlyRank badge — FR-D1-T668H-R789R, Front-end AI Engineering, July 2026 */
+function FlyRankBadge() {
+  return (
+    <a
+      href="https://internship.flyrank.ai/verify?id=FR-D1-T668H-R789R&first_name=Alishba"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Verify Alishba Nazem's FlyRank AI Internship credential"
+      style={{
+        boxSizing: "border-box",
+        margin: 0,
+        border: "1px solid #DDE4E7",
+        textDecoration: "none",
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+        fontStyle: "normal",
+        lineHeight: 1.25,
+        textTransform: "none",
+        float: "none",
+        WebkitFontSmoothing: "antialiased",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "6px 14px 6px 11px",
+        background: "#FFFFFF",
+        borderRadius: 9999,
+        verticalAlign: "middle",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <svg width="11" height="15" viewBox="26 18 44 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style={{ display: "block", flex: "none", opacity: 1, transform: "none", maxWidth: "none" }}>
+        <path d="M28.2354 74.2202V67.9039C29.6419 68.4369 31.3724 68.7055 33.4311 68.7055C35.3235 68.7055 36.8153 68.2396 37.8979 67.3079C38.9805 66.3762 39.9566 64.8695 40.8218 62.792L42.6887 58.3139L29.8976 29.2879C35.0038 29.2879 39.6028 32.3307 41.5294 36.9893L47.0746 50.3985L56.0126 28.6038C57.9221 23.9452 62.5168 20.894 67.6187 20.894L50.0795 63.5936C48.4556 67.5933 46.5205 70.5102 44.2743 72.3484C42.0281 74.1867 39.1169 75.1058 35.5451 75.1058C32.6212 75.1058 30.1875 74.812 28.2354 74.2244V74.2202Z" fill="#1A7A4A" />
+      </svg>
+      <span style={{ margin: 0, padding: 0, border: 0, background: "none", fontStyle: "normal", letterSpacing: "normal", textTransform: "none", textDecoration: "none", whiteSpace: "normal", float: "none", fontSize: 13, fontWeight: 600, color: "#051F21" }}>
+        FlyRank verified
+      </span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style={{ display: "block", flex: "none", opacity: 1, transform: "none", maxWidth: "none" }}>
+        <circle cx="12" cy="12" r="10" stroke="#1A7A4A" strokeWidth="1.5" />
+        <path d="M7.9 12.3l2.8 2.8 5.4-5.8" stroke="#1A7A4A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </a>
   );
 }
 
@@ -1371,6 +1417,9 @@ export default function AlishbaPortfolio() {
             alishba<span>.dev</span>
           </button>
           <p className="ap-signoff-sub">Come back anytime. The work here keeps shipping.</p>
+          <div className="ap-footer-badge">
+            <FlyRankBadge />
+          </div>
           <p className="ap-footer-credit">Built by Alishba Nazem · React + Vite</p>
         </Reveal>
       </footer>
