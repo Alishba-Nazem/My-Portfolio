@@ -1,4 +1,8 @@
 {
+  "rewrites": [
+    { "source": "/shader", "destination": "/index.html" },
+    { "source": "/shader/", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/robots.txt",
