@@ -427,7 +427,7 @@ body{margin:0; background:var(--bg);}
    show through the veil, so lift the links to near-white. */
 .ap-nav:not(.scrolled) .ap-links a{color:rgba(255,255,255,.86);}
 .ap-nav:not(.scrolled) .ap-links a:hover{color:#fff;}
-.ap-logo{font-family:'JetBrains Mono',monospace; font-weight:500; font-size:15px; letter-spacing:.5px; color:var(--ink); cursor:pointer;}
+.ap-logo{font-family:'JetBrains Mono',monospace; font-weight:500; font-size:15px; letter-spacing:.5px; color:var(--ink); cursor:pointer; text-decoration:none;}
 .ap-logo span{color:var(--accent);}
 .ap-links{display:flex; gap:24px; align-items:center;}
 .ap-links a{font-size:13.5px; font-weight:500; color:var(--ink-soft); text-decoration:none; cursor:pointer; position:relative; padding:4px 0;}
@@ -558,7 +558,7 @@ body{margin:0; background:var(--bg);}
 .ap-case-block li{margin-bottom:4px;}
 .ap-case-ctas{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; align-items:center;}
 .ap-section-cta{display:flex; justify-content:center; margin-top:36px;}
-.ap-btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--border); padding:12px 22px; border-radius:4px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif; transition:border-color .18s ease, color .18s ease;}
+.ap-btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--border); padding:12px 22px; border-radius:4px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif; text-decoration:none; display:inline-flex; align-items:center; gap:10px; transition:border-color .18s ease, color .18s ease;}
 .ap-btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
 
 /* ---------- CONTACT FORM ----------
@@ -595,7 +595,7 @@ body{margin:0; background:var(--bg);}
 .ap-footer{position:relative; z-index:1; border-top:1px solid var(--border); background:var(--surface); padding:64px 6vw 28px; text-align:center;}
 .ap-signoff-line{font-family:'Space Grotesk',sans-serif; font-size:clamp(19px,2.4vw,26px); font-weight:600; line-height:1.5; color:var(--ink); margin:0 0 22px;}
 .ap-signoff-line b{color:var(--accent); font-weight:700;}
-.ap-signoff-mark{display:inline-flex; align-items:baseline; gap:2px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:22px; letter-spacing:.3px; color:var(--ink); cursor:pointer; padding:4px 2px; transition:letter-spacing .2s ease; background:none; border:none;}
+.ap-signoff-mark{display:inline-flex; align-items:baseline; gap:2px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:22px; letter-spacing:.3px; color:var(--ink); cursor:pointer; padding:4px 2px; transition:letter-spacing .2s ease; background:none; border:none; text-decoration:none;}
 .ap-signoff-mark span{color:var(--accent);}
 .ap-signoff-mark:hover{letter-spacing:1.5px;}
 .ap-signoff-sub{margin:10px 0 0; font-size:12.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;}
@@ -988,6 +988,11 @@ export default function AlishbaPortfolio() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const onHashLink = (e, id) => {
+    e.preventDefault();
+    scrollTo(id);
+  };
+
   const sendMessage = async (text) => {
     const msg = text ?? input;
     if (!msg.trim() || loading) return;
@@ -1027,9 +1032,9 @@ export default function AlishbaPortfolio() {
 
       {/* NAV */}
       <nav className={`ap-nav ${scrolled ? "scrolled" : ""}`}>
-        <div className="ap-logo" onClick={() => scrollTo("home")}>alishba<span>.dev</span></div>
+        <a className="ap-logo" href="#home" onClick={(e) => onHashLink(e, "home")}>alishba<span>.dev</span></a>
         <div className="ap-links">
-          {navItems.map(([id, label]) => <a key={id} onClick={() => scrollTo(id)}>{label}</a>)}
+          {navItems.map(([id, label]) => <a key={id} href={`#${id}`} onClick={(e) => onHashLink(e, id)}>{label}</a>)}
           {CONTACT.resume && (
             <a className="ap-resume-btn" href={CONTACT.resume} download>
               <DownloadIcon />Résumé
@@ -1042,7 +1047,7 @@ export default function AlishbaPortfolio() {
       <div className={`ap-overlay ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)} />
       <div className={`ap-mobile-menu ${menuOpen ? "open" : ""}`}>
         <button className="ap-mobile-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
-        {navItems.map(([id, label]) => <a key={id} onClick={() => scrollTo(id)}>{label}</a>)}
+        {navItems.map(([id, label]) => <a key={id} href={`#${id}`} onClick={(e) => onHashLink(e, id)}>{label}</a>)}
         {CONTACT.resume && (
           <a className="ap-resume-btn" style={{ width: "fit-content" }} href={CONTACT.resume} download>
             <DownloadIcon />Résumé
@@ -1065,17 +1070,17 @@ export default function AlishbaPortfolio() {
             Four internships this year, and a live client product in production.
           </p>
           <div className="ap-hero-ctas">
-            <button className="ap-btn-solid" onClick={() => scrollTo("projects")}>
+            <a className="ap-btn-solid" href="#projects" onClick={(e) => onHashLink(e, "projects")}>
               View My Work <span>&rarr;</span>
-            </button>
+            </a>
             {CONTACT.resume && (
               <a className="ap-link-action" href={CONTACT.resume} download>
                 Download résumé <span>&rarr;</span>
               </a>
             )}
-            <button className="ap-link-action ap-accent" onClick={() => scrollTo("contact")}>
+            <a className="ap-link-action ap-accent" href="#contact" onClick={(e) => onHashLink(e, "contact")}>
               Get in Touch <span>&rarr;</span>
-            </button>
+            </a>
           </div>
           <div className="ap-hero-meta">
             <div className="ap-hero-stats">{HERO_STATS}</div>
@@ -1173,9 +1178,9 @@ export default function AlishbaPortfolio() {
         ))}
 
         <div className="ap-section-cta">
-          <button className="ap-btn-ghost" onClick={() => scrollTo("more-projects")}>
+          <a className="ap-btn-ghost" href="#more-projects" onClick={(e) => onHashLink(e, "more-projects")}>
             View All Projects <span>&rarr;</span>
-          </button>
+          </a>
         </div>
       </section>
 
@@ -1205,9 +1210,9 @@ export default function AlishbaPortfolio() {
           ))}
         </div>
         <div className="ap-section-cta">
-          <button className="ap-btn-solid" onClick={() => scrollTo("contact")}>
+          <a className="ap-btn-solid" href="#contact" onClick={(e) => onHashLink(e, "contact")}>
             Contact Me
-          </button>
+          </a>
         </div>
       </section>
 
@@ -1226,9 +1231,9 @@ export default function AlishbaPortfolio() {
           ))}
         </div>
         <div className="ap-section-cta">
-          <button className="ap-btn-ghost" onClick={() => scrollTo("projects")}>
+          <a className="ap-btn-ghost" href="#projects" onClick={(e) => onHashLink(e, "projects")}>
             Explore My Projects <span>&rarr;</span>
-          </button>
+          </a>
         </div>
       </section>
 
@@ -1284,9 +1289,9 @@ export default function AlishbaPortfolio() {
           </Reveal>
         </div>
         <div className="ap-section-cta">
-          <button className="ap-btn-solid" onClick={() => scrollTo("projects")}>
+          <a className="ap-btn-solid" href="#projects" onClick={(e) => onHashLink(e, "projects")}>
             View My Work
-          </button>
+          </a>
         </div>
       </section>
 
@@ -1413,9 +1418,9 @@ export default function AlishbaPortfolio() {
             Real problems, <b>working products</b>. That's the whole pitch.
             If it stuck, remember the name.
           </p>
-          <button className="ap-signoff-mark" onClick={() => scrollTo("home")}>
+          <a className="ap-signoff-mark" href="#home" onClick={(e) => onHashLink(e, "home")}>
             alishba<span>.dev</span>
-          </button>
+          </a>
           <p className="ap-signoff-sub">Come back anytime. The work here keeps shipping.</p>
           <div className="ap-footer-badge">
             <FlyRankBadge />
