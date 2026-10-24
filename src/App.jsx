@@ -156,6 +156,8 @@ const OTHER_PROJECTS = PROJECTS.filter((p) => !p.featured);
 const projectIndexOf = (name) => PROJECTS.findIndex((p) => p.name === name);
 
 const isVideo = (path) => /\.(mp4|webm|mov)$/i.test(path);
+/* Still frame shown while a video loads: public/projects/posters/<video-name>.jpg */
+const posterOf = (path) => path.replace(/^\/projects\/(.+)\.(mp4|webm|mov)$/i, "/projects/posters/$1.jpg");
 
 /* The actual flow behind the AI Content Automation Dashboard, stage by stage.
    Shown as a wired-up pipeline instead of generic "what I do" cards. */
@@ -810,6 +812,7 @@ function ProjectThumb({ project, onOpen }) {
         isVideo(first) ? (
           <video
             src={first}
+            poster={posterOf(first)}
             autoPlay loop muted playsInline
             aria-label={mediaAlt}
             onError={() => setFailed(true)}
@@ -1477,6 +1480,7 @@ export default function AlishbaPortfolio() {
                 <video
                   key={gallery.mediaIndex}
                   src={PROJECTS[gallery.projectIndex].media[gallery.mediaIndex]}
+                  poster={posterOf(PROJECTS[gallery.projectIndex].media[gallery.mediaIndex])}
                   controls autoPlay
                   aria-label={projectMediaAlt(PROJECTS[gallery.projectIndex])}
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
