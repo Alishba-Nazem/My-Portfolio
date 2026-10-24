@@ -37,7 +37,7 @@ Tools: Git/GitHub, Vercel, Railway, n8n, Cursor, Visual Studio, Android Studio.
 
 Achievements: 2nd place IdeaRise Startup Challenge 2026 (pitched ReqAmbiguityAI), merit-based scholarship in 2nd/3rd/4th semesters at University of Gujrat, PEEF scholarship in 10th class, laptop under PM Youth Laptop Scheme, Google Project Management / UX / AI Prompting Essentials certificates (Coursera), matriculation topper 1100/1100.
 Hobbies: book reading, badminton, TEDx talks, Duolingo.
-Contact: alishbanazem@gmail.com, linkedin.com/in/alishba-nazem-a37971300, github.com/Alishba-Nazem. Her resume is downloadable from the button in the site header.
+Contact: alishbanazem@gmail.com, linkedin.com/in/alishba-nazem, github.com/Alishba-Nazem. Her resume is downloadable from the button in the site header.
 
 RULES:
 1. Give contact info plainly when asked.
