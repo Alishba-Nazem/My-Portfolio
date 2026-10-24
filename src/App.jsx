@@ -13,7 +13,7 @@ const HERO_POSTER = "/hero-poster.jpg";
 const HEADLINE = "I build practical, user-focused web and AI solutions that turn real problems into working digital products.";
 const ROLE = "Full-Stack Developer & AI Automation";
 
-const HERO_STATS = "8 projects · 4 internships · 2 automation systems in production · CGPA 3.78";
+const HERO_STATS = "8 projects · 5 internships · 2 automation systems in production · CGPA 3.78";
 
 /* Strongest-first order. `featured: true` projects get a deep case-study layout.
    - `media`  : paths from `public/projects/`. First = thumbnail; click opens gallery.
@@ -197,28 +197,34 @@ const SKILLS = {
 
 const EXPERIENCE = [
   {
+    role: "Full Stack & AI Automation Intern",
+    org: "RISEUP@work",
+    time: "Sep 2026 to Present",
+    note: "Building frontend and full-stack product features, plus an AI-powered content engine automation.",
+  },
+  {
     role: "AI Automation Intern",
     org: "Dafi Labs",
-    time: "2026 to Present",
-    note: "Building AI agent workflows and automation pipelines.",
+    time: "Jul 2026 to Aug 2026 · 2 months",
+    note: "Built an AI competitor tracker (NestJS, Next.js, Claude API) and an n8n LinkedIn content workflow.",
   },
   {
-    role: "Full-Stack Developer",
-    org: "ScaleUp Brands",
-    time: "June 2026 to Present",
-    note: "Shipping the gamification & rewards panel for SpeakUp Schools.",
-  },
-  {
-    role: "Frontend AI Engineering",
+    role: "Frontend Engineer Intern",
     org: "FlyRank AI",
-    time: "June 2026 to Present",
-    note: "Building AI-facing product interfaces.",
+    time: "Jul 2026 to Aug 2026 · 2 months",
+    note: "Lighthouse audits and performance work to improve Core Web Vitals, plus AI-integrated frontend features.",
   },
   {
-    role: "Frontend Developer",
+    role: "Full-Stack Developer Intern",
+    org: "Scale Up Brands UK",
+    time: "Jul 2026 · 1 month",
+    note: "Shipped the gamification & rewards panel for SpeakUp Schools end-to-end.",
+  },
+  {
+    role: "Frontend Developer Intern",
     org: "DecodeLabs",
     time: "May 2026 · 1 month",
-    note: "Component work on production React interfaces.",
+    note: "Responsive website layouts across devices and screen sizes.",
   },
 ];
 
@@ -229,7 +235,10 @@ const EDUCATION = [
 ];
 
 const ACHIEVEMENTS = [
-  "2nd Position, IdeaRise Startup Challenge",
+  "2nd Position, IdeaRise Startup Challenge 2026, pitching ReqAmbiguityAI",
+  "Merit-based scholarship, 2nd, 3rd and 4th semesters (University of Gujrat)",
+  "PEEF (Punjab Educational Endowment Fund) scholarship in 10th class",
+  "Laptop awarded under the PM Youth Laptop Scheme",
   "Google Foundations of Project Management (Coursera)",
   "Google UX Specialization (Coursera)",
   "Google AI Prompting Essentials (Coursera)",
@@ -240,7 +249,7 @@ const HOBBIES = ["Book reading", "Badminton", "TEDx talks", "Learning languages 
 
 const CONTACT = {
   email: "alishbanazem@gmail.com",
-  linkedin: "https://www.linkedin.com/in/alishba-nazem-a37971300",
+  linkedin: "https://www.linkedin.com/in/alishba-nazem/",
   github: "https://github.com/Alishba-Nazem",
   /* Resume PDF lives at: public/Alishba-Nazem-Resume.pdf */
   resume: "/Alishba-Nazem-Resume.pdf",
@@ -272,7 +281,7 @@ const KNOWLEDGE = [
       `Automation is the core of what she does. Two production systems:\n\n` +
       `1. ${describeProject("AI Content Automation Dashboard")}\n\n` +
       `2. ${describeProject("AI Competitor Tracker")}\n\n` +
-      `She's also an AI Automation Intern at Dafi Labs, building agent workflows and automation pipelines.`,
+      `She's currently a Full Stack & AI Automation Intern at RISEUP@work, building a content engine automation, and earlier built agent workflows at Dafi Labs.`,
   },
   {
     match: /\b(only|just)\b.*\bfront ?end\b|\bfront ?end\b.*\b(only|just)\b/i,
@@ -289,7 +298,7 @@ const KNOWLEDGE = [
     answer: () =>
       `That's really her work's call rather than mine, but here's the relevant part: she's full-stack (React/Next, ` +
       `Node/NestJS, PostgreSQL) with production AI automation experience (n8n agent workflows, Playwright scrapers, ` +
-      `scheduled jobs), four internships this year, and a live client product. Best way to judge is the Projects ` +
+      `scheduled jobs), five internships this year, and a live client product. Best way to judge is the Projects ` +
       `section or a direct conversation: ${CONTACT.email}.`,
   },
   {
@@ -325,7 +334,7 @@ const KNOWLEDGE = [
   {
     match: /\b(experience|intern|job|work|compan|employ|career)/i,
     answer: () =>
-      `Four roles this year:\n\n` +
+      `Five internships this year:\n\n` +
       EXPERIENCE.map((e) => `• ${e.role} at ${e.org} (${e.time}): ${e.note}`).join("\n"),
   },
   {
@@ -360,7 +369,7 @@ const KNOWLEDGE = [
       `Alishba Nazem is a Software Engineering student and a full-stack developer who also builds AI automation. ` +
       `She builds React and Next.js front ends, Node/Express/NestJS APIs and PostgreSQL data layers, then wires ` +
       `AI agents and n8n workflows on top so repetitive work runs on a schedule.\n\n` +
-      `Right now she's juggling four internships plus a live client product, with a 3.78/4.0 CGPA.`,
+      `Right now she's a Full Stack & AI Automation Intern at RISEUP@work, after four earlier internships this year, with a 3.78/4.0 CGPA.`,
   },
 ];
 
@@ -1067,7 +1076,7 @@ export default function AlishbaPortfolio() {
           <p className="lead">
             Software engineering student building <b>full-stack products</b> and
             <b> AI automation</b> that solve real problems not just demos.
-            Four internships this year, and a live client product in production.
+            Five internships this year, and a live client product in production.
           </p>
           <div className="ap-hero-ctas">
             <a className="ap-btn-solid" href="#projects" onClick={(e) => onHashLink(e, "projects")}>
@@ -1240,7 +1249,7 @@ export default function AlishbaPortfolio() {
       {/* EXPERIENCE */}
       <section id="experience" className="ap-section">
         <Reveal><div className="ap-eyebrow">Experience</div></Reveal>
-        <Reveal delay={80}><h2 className="ap-h2">Four internships, same year</h2></Reveal>
+        <Reveal delay={80}><h2 className="ap-h2">Five internships, one year</h2></Reveal>
         <div className="ap-card-row">
           {EXPERIENCE.map((e, i) => (
             <Reveal key={e.org} delay={i * 70}>
@@ -1274,7 +1283,7 @@ export default function AlishbaPortfolio() {
               </p>
               <p>
                 I picked up NestJS, Prisma, Playwright and n8n because projects needed them, not from a
-                course. Four internships this year taught me more than any of my semesters did, honestly.
+                course. Five internships this year taught me more than any of my semesters did, honestly.
                 My CGPA is 3.78 if that matters to you, but the projects below are the real answer.
               </p>
             </div>
@@ -1283,7 +1292,7 @@ export default function AlishbaPortfolio() {
             <div>
               <div className="ap-fact-card"><b>3.78 / 4.0</b><span>CGPA so far</span></div>
               <div className="ap-fact-card"><b>8</b><span>projects shipped or in progress</span></div>
-              <div className="ap-fact-card"><b>4</b><span>internships this year</span></div>
+              <div className="ap-fact-card"><b>5</b><span>internships this year</span></div>
               <div className="ap-fact-card"><b>1100 / 1100</b><span>matriculation score</span></div>
             </div>
           </Reveal>

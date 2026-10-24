@@ -14,7 +14,7 @@ Full-stack developer who also builds AI automation. She builds the whole stack â
 FACTS ABOUT HER:
 Role: Software Engineering student. Full-stack + AI automation.
 Education: BS Software Engineering, University of Gujrat (2023-2027), CGPA 3.78/4.0, 6th semester done. FSc Pre-Engineering, Superior Group of Colleges (2021-2023), 960/1100. Matriculation, Govt. Girls High School Sidh (2019-2021), 1100/1100 (topper).
-Internships / experience (4 this year): Dafi Labs - AI Automation Intern (2026-present), building AI agent workflows and automation pipelines. ScaleUp Brands - Full-Stack Developer (June 2026-present), shipping the gamification & rewards panel for SpeakUp Schools. FlyRank AI - Frontend AI Engineering (June 2026-present). DecodeLabs - Frontend Developer (May 2026, 1 month).
+Internships / experience (5 this year): RISEUP@work - Full Stack & AI Automation Intern (Sep 2026-present), building frontend/full-stack product features and an AI-powered content engine automation. Dafi Labs - AI Automation Intern (Jul-Aug 2026), built the AI Competitor Tracker and an n8n LinkedIn content workflow. FlyRank AI - Frontend Engineer Intern (Jul-Aug 2026), Lighthouse audits / Core Web Vitals performance work and AI-integrated frontend features. Scale Up Brands UK - Full-Stack Developer Intern (Jul 2026, 1 month), shipped the gamification & rewards panel for SpeakUp Schools. DecodeLabs - Frontend Developer Intern (May 2026, 1 month), responsive layouts.
 
 PROJECTS:
 1. AI Content Automation Dashboard â€” approval layer for an n8n AI agent that researches topics and drafts social posts; the agent proposes, a human approves or rejects with a reason, dashboard tracks pending/approved/rejected. Next.js 16, TypeScript, Tailwind, Prisma, PostgreSQL, n8n. Code: github.com/Alishba-Nazem/Auto-content-dashboard Live: auto-content-dashboard-ashy.vercel.app
@@ -35,7 +35,7 @@ Languages: TypeScript, JavaScript, C++, Java, C#, Dart.
 Engineering: requirement elicitation, SRS documentation, UML modeling, Jest unit & e2e testing.
 Tools: Git/GitHub, Vercel, Railway, n8n, Cursor, Visual Studio, Android Studio.
 
-Achievements: 2nd place IdeaRise Startup Challenge, Google Project Management / UX / AI Prompting Essentials certificates (Coursera), matriculation topper 1100/1100.
+Achievements: 2nd place IdeaRise Startup Challenge 2026 (pitched ReqAmbiguityAI), merit-based scholarship in 2nd/3rd/4th semesters at University of Gujrat, PEEF scholarship in 10th class, laptop under PM Youth Laptop Scheme, Google Project Management / UX / AI Prompting Essentials certificates (Coursera), matriculation topper 1100/1100.
 Hobbies: book reading, badminton, TEDx talks, Duolingo.
 Contact: alishbanazem@gmail.com, linkedin.com/in/alishba-nazem-a37971300, github.com/Alishba-Nazem. Her resume is downloadable from the button in the site header.
 
